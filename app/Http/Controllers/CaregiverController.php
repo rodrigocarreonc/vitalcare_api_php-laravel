@@ -49,4 +49,39 @@ class CaregiverController extends Controller
             ], 422);
         }
     }
+
+    //Update
+    public function update(Request $request, $id){
+        // Validar los datos de entrada
+        $validatedData = $request->validate([
+            'first_name' => 'sometimes|required|string|max:255',
+            'last_name' => 'sometimes|required|string|max:255',
+            'occupation' => 'sometimes|required|in:Acompañamiento,Cuidado',
+            'phone_number' => 'sometimes|required|string|max:15',
+            'email' => 'sometimes|required|email|unique:caregivers,email,' . $id,
+            'password' => 'sometimes|required|string|min:8',
+        ]);
+
+        $caregiver = Caregiver::find($id);
+
+        if(!$caregiver){
+            return response()->json([
+                'message'=> 'Cuidador no encontrado o inexistente',
+            ],404);
+        }
+
+        $caregiver->update([
+            'first_name' => $validatedData['first_name'] ?? $caregiver->first_name,
+            'last_name' => $validatedData['last_name'] ?? $caregiver->last_name,
+            'occupation' => $validatedData['occupation'] ?? $caregiver->occupation,
+            'phone_number' => $validatedData['phone_number'] ?? $caregiver->phone_number,
+            'email' => $validatedData['email'] ?? $caregiver->email,
+            'password' => isset($validatedData['password']) ? bcrypt($validatedData['password']) : $caregiver->password,
+        ]);
+
+        return response()->json([
+            'message'=>'Cuidador actualizado correctamente',
+            'cuidador' => $caregiver,
+        ],200);
+    }
 }

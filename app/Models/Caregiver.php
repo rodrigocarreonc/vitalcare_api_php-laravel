@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Caregiver extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'id_caregiver';
 
     protected $hidden = ['password','created_at','updated_at'];
 
