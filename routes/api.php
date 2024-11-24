@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/caregivers',[CaregiverController::class,'all']);
+Route::get('/caregivers/{id}',[CaregiverController::class,'get']);
 Route::post('/caregivers',[CaregiverController::class,'create']);
 Route::put('/caregivers/update/{id}',[CaregiverController::class, 'update']);
 Route::delete('/caregivers/delete/{id}',[CaregiverController::class, 'delete']);

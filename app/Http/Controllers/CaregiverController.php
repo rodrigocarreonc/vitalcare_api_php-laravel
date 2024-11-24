@@ -14,6 +14,11 @@ class CaregiverController extends Controller
         return response()->json($caregivers);
     }
 
+    public function get($id){
+        $caregiver = Caregiver:: where('id_caregiver',$id)->get();
+        return response()->json($caregiver);
+    }
+
     //Create
     public function create(Request $request)
     {
