@@ -84,4 +84,20 @@ class CaregiverController extends Controller
             'cuidador' => $caregiver,
         ],200);
     }
+
+    public function delete($id){
+        $caregiver = Caregiver::find($id);
+
+        if(!$caregiver){
+            return response()->json([
+                'message' => 'Cuidador no encontrado o inexistente',
+            ],404);
+        }
+
+        $caregiver->delete();
+
+        return response()->json([
+            'message'=>'Cuidador eliminado exitosamente',
+        ],200);
+    }
 }

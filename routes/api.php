@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/caregivers',[CaregiverController::class,'all']);
 Route::post('/caregivers',[CaregiverController::class,'create']);
-Route::put('/update_caregiver/{id}',[CaregiverController::class, 'update']);
+Route::put('/caregivers/update/{id}',[CaregiverController::class, 'update']);
+Route::delete('/caregivers/delete/{id}',[CaregiverController::class, 'delete']);
