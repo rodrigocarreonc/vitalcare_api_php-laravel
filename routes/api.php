@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CaregiverController;
+use App\Http\Controllers\AuthAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,16 @@ Route::get('/caregivers/{id}',[CaregiverController::class,'get']);
 Route::post('/caregivers',[CaregiverController::class,'create']);
 Route::put('/caregivers/update/{id}',[CaregiverController::class, 'update']);
 Route::delete('/caregivers/delete/{id}',[CaregiverController::class, 'delete']);
+
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+
+    Route::post('login', [AuthAdminController::class,'login']);
+    Route::post('logout', [AuthAdminController::class,'logout']);
+    Route::post('refresh', [AuthAdminController::class,'refresh']);
+    Route::post('me', [AuthAdminController::class,'me']);
+
+});
