@@ -11,7 +11,7 @@ class Caregiver extends Model
 
     protected $primaryKey = 'id_caregiver';
 
-    protected $fillable = ['first_name','last_name','occupation','phone_number','email'];
+    protected $fillable = ['first_name','last_name','occupation','phone_number','email','password'];
 
     protected $hidden = ['password','created_at','updated_at'];
 }

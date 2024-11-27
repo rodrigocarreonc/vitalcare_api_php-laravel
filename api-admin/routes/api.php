@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CaregiverController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +24,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('admins',[AdminController::class,'index']);
 
-Route::get('caregivers',[CaregiverController::class,'all']);
-Route::get('caregivers/{id}',[CaregiverController::class,'get']);
-Route::post('caregivers/register',[CaregiverController::class,'register']);
-Route::get('caregivers/update/{id}',[CaregiverController::class,'update']);
-Route::get('caregivers/delete/{id}',[CaregiverController::class,'delete']);
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+    Route::post('login', [AuthController::class,'login']);
+    Route::post('logout', [AuthController::class,'logout']);
+    Route::post('refresh', [AuthController::class,'refresh']);
+    Route::get('me', [AuthController::class,'me']);
+});
+
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+    Route::get('caregivers',[CaregiverController::class,'all']);
+    Route::get('caregivers/{id}',[CaregiverController::class,'get']);
+    Route::post('caregivers/register',[CaregiverController::class,'register']);
+    Route::put('caregivers/update/{id}',[CaregiverController::class,'update']);
+    Route::delete('caregivers/delete/{id}',[CaregiverController::class,'delete']);
+});
