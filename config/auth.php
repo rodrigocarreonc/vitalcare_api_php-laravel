@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -45,6 +45,11 @@ return [
             'driver'=>'jwt',
             'provider' => 'admin',
         ],
+
+        'caregivers' => [
+            'driver' => 'jwt',
+            'provider' => 'caregiver',
+        ]
     ],
 
     /*
@@ -73,6 +78,11 @@ return [
         'admin' =>[
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+
+        'caregiver' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Caregiver::class,
         ]
 
         // 'users' => [

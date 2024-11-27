@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Caregiver;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Admin;
-
-class AuthAdminController extends Controller
+class AuthCaregiverController extends Controller
 {
     /**
      * Create a new AuthController instance.
@@ -18,7 +15,7 @@ class AuthAdminController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:caregivers', ['except' => ['login']]);
     }
 
     /**
@@ -26,16 +23,15 @@ class AuthAdminController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
-    {
-        $credentials = request(['user', 'password']);
-
-        if (! $token = auth('api')->attempt($credentials)) {
+    public function login(){
+        $credentials = request(['email', 'password']);
+        if (! $token = auth('caregivers')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return $this->respondWithToken($token);
     }
+
 
     /**
      * Get the authenticated User.
@@ -44,7 +40,7 @@ class AuthAdminController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(auth('caregivers')->user());
     }
 
     /**
@@ -54,7 +50,7 @@ class AuthAdminController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('caregivers')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -66,7 +62,7 @@ class AuthAdminController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth('caregivers')->refresh());
     }
 
     /**
@@ -81,30 +77,7 @@ class AuthAdminController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth('caregivers')->factory()->getTTL() * 60
         ]);
-    }
-
-    public function register(Request $request){
-        $validate = Validator::make($request->all(),[
-            'first_name'=>'required|string|max:100',
-            'last_name'=>'required|string|max:100',
-            'user'=>'required|string|unique:admins',
-            'password'=>'required|string|min:8',
-        ]);
-
-        if($validate->fails()){
-            return response()->json($validate->errors()->toJson(),400);
-        }
-
-        $admin = Admin::create(array_merge(
-            $validate->validate(),
-            ['password' => bcrypt($request->password)]
-        ));
-
-        return response()->json([
-            'message'=>'Administrador Creado Con Exito',
-            'admin' => $admin
-        ],201);
     }
 }

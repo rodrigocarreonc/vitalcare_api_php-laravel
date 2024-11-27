@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CaregiverController;
 use App\Http\Controllers\AuthAdminController;
+use App\Http\Controllers\AuthCaregiverController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,14 +28,25 @@ Route::put('/caregivers/update/{id}',[CaregiverController::class, 'update']);
 Route::delete('/caregivers/delete/{id}',[CaregiverController::class, 'delete']);
 
 Route::group([
-
     'middleware' => 'api',
-    'prefix' => 'auth'
+    'prefix' => 'admin/auth'
 ], function ($router) {
-
     Route::post('login', [AuthAdminController::class,'login']);
+    Route::post('register', [AuthAdminController::class,'register']);
     Route::post('logout', [AuthAdminController::class,'logout']);
     Route::post('refresh', [AuthAdminController::class,'refresh']);
-    Route::post('me', [AuthAdminController::class,'me']);
-
+    Route::get('me', [AuthAdminController::class,'me']);
 });
+
+
+Route::group([
+    'middleware' => 'auth:caregivers',
+    'prefix' => 'caregiver/auth'
+], function ($router) {
+    Route::post('login', [AuthCaregiverController::class, 'login']);
+    Route::post('logout', [AuthCaregiverController::class, 'logout']);
+    Route::post('refresh', [AuthCaregiverController::class, 'refresh']);
+    Route::get('me', [AuthCaregiverController::class, 'me']);
+});
+
+
