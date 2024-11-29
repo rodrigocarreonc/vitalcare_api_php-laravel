@@ -31,3 +31,12 @@ Route::group([
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
 });
+
+Route::group([
+    'middleware' => 'auth:api',
+    'prefix' => 'service'
+], function ($router) {
+    Route::get('caregivers', [CaregiverController::class,'index']);
+
+    Route::post('editProfile',[CaregiverController::class,'updateProfile']);
+});
