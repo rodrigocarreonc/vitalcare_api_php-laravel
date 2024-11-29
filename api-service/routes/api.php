@@ -37,6 +37,7 @@ Route::group([
     'prefix' => 'service'
 ], function ($router) {
     Route::get('caregivers', [CaregiverController::class,'index']);
+    Route::get('appointments',[CaregiverController::class,'appointments']);
 
     Route::post('editProfile',[CaregiverController::class,'updateProfile']);
 });

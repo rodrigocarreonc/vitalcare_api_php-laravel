@@ -42,4 +42,12 @@ class CaregiverController extends Controller
             'cuidador' => $caregiver,
         ], 200);
     }
+
+    public function appointments(){
+        $id = auth()->user()->id_caregiver;
+        $appointment = Caregiver::join('appointment','caregivers.id_caregiver','=','appointment.id_caregiver')
+        ->where('caregivers.id_caregiver',$id)
+        ->select('cause','date')->get();
+        return response()->json($appointment);
+    }
 }
