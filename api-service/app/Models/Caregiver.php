@@ -19,6 +19,13 @@ class Caregiver extends Authenticatable implements JWTSubject
 
     protected $hidden = ['password','created_at','updated_at'];
 
+
+    public function appointment()
+    {
+        return $this->hasMany(Appointment::class, 'id_caregiver');
+    }
+
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

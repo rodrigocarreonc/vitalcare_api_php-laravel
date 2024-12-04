@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Caregiver;
+use App\Models\Appointment;
 
 class CaregiverController extends Controller
 {
@@ -45,9 +46,17 @@ class CaregiverController extends Controller
 
     public function appointments(){
         $id = auth()->user()->id_caregiver;
-        $appointment = Caregiver::join('appointment','caregivers.id_caregiver','=','appointment.id_caregiver')
-        ->where('caregivers.id_caregiver',$id)
-        ->select('cause','date')->get();
+        $appointment = Appointment::where('id_caregiver', $id)
+        ->with(['patient:id_patient,first_name,last_name']) // Carga el paciente asociado (id y nombre)
+        ->get(['id_patient','cause', 'date'])
+        ->map(function ($appointment) {
+            return [
+                'patient_name' => $appointment->patient->first_name ?? 'N/A',
+                'patient_lastname' => $appointment->patient->last_name ?? 'N/A',
+                'cause' => $appointment->cause,
+                'date' => $appointment->date, // Agrega el nombre del paciente
+            ];
+        }); // Selecciona las columnas necesarias
         return response()->json($appointment);
     }
 }
