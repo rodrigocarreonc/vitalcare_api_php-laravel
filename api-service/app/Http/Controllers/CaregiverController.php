@@ -54,9 +54,32 @@ class CaregiverController extends Controller
                 'patient_name' => $appointment->patient->first_name ?? 'N/A',
                 'patient_lastname' => $appointment->patient->last_name ?? 'N/A',
                 'cause' => $appointment->cause,
-                'date' => $appointment->date, // Agrega el nombre del paciente
+                'date' => $appointment->date,
             ];
-        }); // Selecciona las columnas necesarias
+        });
         return response()->json($appointment);
+    }
+
+    public function addAppointment(){
+        $validateData = $request->validate([
+            'cause' => 'required|string|max:100',
+            'date' => 'required|date',
+            'id_caregiver' => 'required|int',
+            'id_patient' => 'required|int'
+        ]);
+
+        $data = [
+            'cause' => $validateData['cause'],
+            'date' => $validateData['date'],
+            'id_caregiver' => $validateData['id_caregiver'],
+            'id_patient' => $validateData['id_patient']
+        ];
+
+        $appointment = Appointment::create($data);
+
+        return response()->json([
+            'message' => "Cita Creada Con Exito!",
+            'appointment' => $appointment, 
+        ],200);
     }
 }

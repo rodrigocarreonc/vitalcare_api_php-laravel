@@ -38,6 +38,8 @@ Route::group([
 ], function ($router) {
     Route::get('caregivers', [CaregiverController::class,'index']);
     Route::get('appointments',[CaregiverController::class,'appointments']);
+    
+    Route::post('addAppointment',[CaregiverController::class,'addAppointment']);
 
     Route::post('editProfile',[CaregiverController::class,'updateProfile']);
 });
