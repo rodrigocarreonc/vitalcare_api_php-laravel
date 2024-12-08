@@ -60,7 +60,7 @@ class CaregiverController extends Controller
         return response()->json($appointment);
     }
 
-    public function addAppointment(){
+    public function addAppointment(Request $request){
         $validateData = $request->validate([
             'cause' => 'required|string|max:100',
             'date' => 'required|date',

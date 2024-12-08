@@ -12,6 +12,9 @@ class Appointment extends Model
     protected $table = 'appointment';
     protected $primaryKey = 'id_appointment';
 
+    protected $fillable = ['cause','date','id_caregiver','id_patient'];
+    protected $hidden = ['created_at','updated_at'];
+
     public function caregiver()
     {
         return $this->belongsTo(Caregiver::class, 'id_caregiver');
